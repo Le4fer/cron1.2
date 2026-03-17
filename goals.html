@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CronosMind - Seguimiento de Objetivos</title>
+    
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/goals.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar (mismo que dashboard, con active en goals) -->
+        <nav class="sidebar">
+            <div class="logo">
+                <h1>Cronos<span>Mind</span></h1>
+            </div>
+            
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="dashboard.html">
+                        <span class="icon">📊</span>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                
+                <li class="nav-item has-submenu">
+                    <a href="cronograma.html">
+                        <span class="icon">📅</span>
+                        <span>Cronograma Maestro</span>
+                        <span class="arrow">▼</span>
+                    </a>
+                    <ul class="sub-menu">
+                        <li><a href="cronograma.html?view=year">Vista Anual</a></li>
+                        <li><a href="cronograma.html?view=quarter">Vista Trimestral</a></li>
+                        <li><a href="cronograma.html?view=month">Vista Mensual</a></li>
+                    </ul>
+                </li>
+                
+                <li class="nav-item active">
+                    <a href="goals.html">
+                        <span class="icon">🎯</span>
+                        <span>Seguimiento de Objetivos</span>
+                    </a>
+                </li>
+                
+                <li class="nav-item">
+                    <a href="journal.html">
+                        <span class="icon">📔</span>
+                        <span>Registros (Journaling)</span>
+                    </a>
+                </li>
+                
+                <li class="nav-item" id="openAIAssistant">
+                    <a href="#">
+                        <span class="icon">🤖</span>
+                        <span>Asistente IA</span>
+                    </a>
+                </li>
+            </ul>
+
+            <div class="sidebar-footer">
+                <div class="user-info">
+                    <span class="user-avatar">👤</span>
+                    <div class="user-details">
+                        <span class="user-name" id="userNameDisplay">Usuario</span>
+                        <span class="user-streak">🔥 Racha: <span id="userStreak">0</span></span>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <main class="main-content">
+            <header class="top-bar">
+                <div class="page-title">
+                    <h2>Seguimiento de Objetivos</h2>
+                    <span class="date">Metas obligatorias, importantes y opcionales</span>
+                </div>
+                <button class="btn btn-primary" id="newGoalBtn">+ Nueva Meta</button>
+            </header>
+
+            <div class="goals-dashboard">
+                <!-- KPI -->
+                <div class="goals-kpi">
+                    <div class="kpi-card">
+                        <div class="kpi-icon">🎯</div>
+                        <div class="kpi-info">
+                            <span class="kpi-value" id="totalGoals">0</span>
+                            <span class="kpi-label">Metas totales</span>
+                        </div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-icon">✅</div>
+                        <div class="kpi-info">
+                            <span class="kpi-value" id="completedGoals">0</span>
+                            <span class="kpi-label">Completadas</span>
+                        </div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-icon">⏳</div>
+                        <div class="kpi-info">
+                            <span class="kpi-value" id="pendingGoals">0</span>
+                            <span class="kpi-label">Pendientes</span>
+                        </div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-icon">📊</div>
+                        <div class="kpi-info">
+                            <span class="kpi-value" id="completionRate">0%</span>
+                            <span class="kpi-label">Efectividad</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tabs -->
+                <div class="goals-tabs">
+                    <button class="tab-btn active" data-type="all">Todas</button>
+                    <button class="tab-btn" data-type="obligatoria">Obligatorias</button>
+                    <button class="tab-btn" data-type="importante">Importantes</button>
+                    <button class="tab-btn" data-type="opcional">Opcionales</button>
+                </div>
+
+                <!-- Lista de metas -->
+                <div class="goals-list-container">
+                    <div class="goals-header">
+                        <div class="goal-check"></div>
+                        <div class="goal-title">Meta</div>
+                        <div class="goal-type">Tipo</div>
+                        <div class="goal-date">Fecha</div>
+                        <div class="goal-category">Categoría</div>
+                        <div class="goal-priority">Prioridad</div>
+                        <div class="goal-actions"></div>
+                    </div>
+                    <div id="goalsList" class="goals-list"></div>
+                </div>
+
+                <!-- Charts -->
+                <div class="goals-charts">
+                    <div class="chart-card">
+                        <h3>Progreso por tipo</h3>
+                        <div class="pie-chart" id="typeChart"></div>
+                    </div>
+                    <div class="chart-card">
+                        <h3>Tendencia semanal</h3>
+                        <div class="line-chart" id="trendChart"></div>
+                    </div>
+                    <div class="chart-card">
+                        <h3>Distribución por categoría</h3>
+                        <div class="bar-chart" id="categoryChart"></div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal Nueva Meta -->
+    <div class="modal" id="goalModal" style="display: none;">
+        <div class="modal-content">
+            <h2>Nueva Meta</h2>
+            <form id="goalForm">
+                <div class="form-group">
+                    <label>Título</label>
+                    <input type="text" id="goalTitle" required>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Tipo</label>
+                        <select id="goalType">
+                            <option value="obligatoria">Obligatoria</option>
+                            <option value="importante">Importante</option>
+                            <option value="opcional">Opcional</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Categoría</label>
+                        <select id="goalCategory">
+                            <option value="salud">Salud</option>
+                            <option value="desarrollo">Desarrollo</option>
+                            <option value="trabajo">Trabajo</option>
+                            <option value="personal">Personal</option>
+                            <option value="bienestar">Bienestar</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Prioridad</label>
+                        <select id="goalPriority">
+                            <option value="alta">Alta</option>
+                            <option value="media">Media</option>
+                            <option value="baja">Baja</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Fecha límite</label>
+                        <input type="date" id="goalDeadline">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Descripción</label>
+                    <textarea id="goalDescription" rows="2"></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="document.getElementById('goalModal').style.display='none'">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Crear Meta</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/main.js"></script>
+    <script src="js/sidebar.js"></script>
+    <script src="js/goals.js"></script>
+    <script src="js/ai-assistant.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if (!window.cronosMind) {
+                window.cronosMind = new CronosMind();
+            }
+            
+            if (typeof GoalsManager !== 'undefined' && document.querySelector('.goals-dashboard')) {
+                window.goalsManager = new GoalsManager();
+            }
+            
+            if (typeof AIAssistant !== 'undefined' && !window.aiAssistant) {
+                window.aiAssistant = new AIAssistant();
+            }
+            
+            document.getElementById('newGoalBtn')?.addEventListener('click', () => {
+                document.getElementById('goalModal').style.display = 'flex';
+                const today = new Date().toISOString().split('T')[0];
+                document.getElementById('goalDeadline').value = today;
+            });
+            
+            document.getElementById('goalForm')?.addEventListener('submit', (e) => {
+                e.preventDefault();
+                if (window.goalsManager) {
+                    window.goalsManager.saveGoal();
+                } else {
+                    // Fallback directo a cronosMind
+                    const title = document.getElementById('goalTitle')?.value;
+                    const type = document.getElementById('goalType')?.value;
+                    if (title && window.cronosMind) {
+                        window.cronosMind.addNewGoal(title, type);
+                        document.getElementById('goalModal').style.display = 'none';
+                        document.getElementById('goalForm').reset();
+                        // Recargar la página para actualizar
+                        setTimeout(() => location.reload(), 500);
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

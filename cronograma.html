@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CronosMind - Cronograma Maestro</title>
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/cronograma.css">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- PWA -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#2563eb">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Mejorado -->
+        <nav class="sidebar">
+            <div class="logo">
+                <h1>Cronos<span>Mind</span></h1>
+            </div>
+            
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="dashboard.html">
+                        <span class="icon">📊</span>
+                        <span>Dashboard</span>
+                        <span class="badge">3</span>
+                    </a>
+                </li>
+                
+                <li class="nav-item has-submenu expanded active">
+                    <a href="cronograma.html">
+                        <span class="icon">📅</span>
+                        <span>Cronograma Maestro</span>
+                        <span class="arrow">▼</span>
+                    </a>
+                    <ul class="sub-menu">
+                        <li><a href="cronograma.html?view=year" class="active-view">Vista Anual</a></li>
+                        <li><a href="cronograma.html?view=quarter">Vista Trimestral</a></li>
+                        <li><a href="cronograma.html?view=month">Vista Mensual</a></li>
+                    </ul>
+                </li>
+                
+                <li class="nav-item">
+                    <a href="goals.html">
+                        <span class="icon">🎯</span>
+                        <span>Seguimiento de Objetivos</span>
+                    </a>
+                </li>
+                
+                <li class="nav-item">
+                    <a href="journal.html">
+                        <span class="icon">📔</span>
+                        <span>Registros (Journaling)</span>
+                        <span class="badge new">Nuevo</span>
+                    </a>
+                </li>
+                
+                <li class="nav-item" id="openAIAssistant">
+                    <a href="#">
+                        <span class="icon">🤖</span>
+                        <span>Asistente IA</span>
+                    </a>
+                </li>
+            </ul>
+
+            <div class="sidebar-footer">
+                <div class="user-info">
+                    <div class="user-avatar">
+                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'%3E%3Ccircle cx='20' cy='20' r='20' fill='%232563eb'/%3E%3Ctext x='20' y='25' text-anchor='middle' fill='white' font-size='16' font-family='Arial'%3E👤%3C/text%3E%3C/svg%3E" alt="Avatar">
+                    </div>
+                    <div class="user-details">
+                        <span class="user-name" id="userNameDisplay">Usuario</span>
+                        <span class="user-streak">🔥 Racha: <span id="userStreak">0</span></span>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Contenido Principal -->
+        <main class="main-content">
+            <header class="top-bar">
+                <div class="page-title">
+                    <h2>Cronograma Maestro</h2>
+                    <span class="date">Visión completa de tu productividad anual</span>
+                </div>
+                <div class="view-controls">
+                    <button class="btn-view active" data-view="year">
+                        <span class="icon">📅</span>
+                        <span>Año</span>
+                    </button>
+                    <button class="btn-view" data-view="quarter">
+                        <span class="icon">📆</span>
+                        <span>Trimestre</span>
+                    </button>
+                    <button class="btn-view" data-view="month">
+                        <span class="icon">🗓️</span>
+                        <span>Mes</span>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Vista Año -->
+            <div class="cronograma-container" id="yearView">
+                <div class="year-selector">
+                    <button class="nav-year" id="prevYear">
+                        <span>←</span>
+                    </button>
+                    <h2 id="displayYear">2026</h2>
+                    <button class="nav-year" id="nextYear">
+                        <span>→</span>
+                    </button>
+                </div>
+
+                <div class="year-grid" id="yearGrid">
+                    <!-- Generado por JavaScript -->
+                </div>
+            </div>
+
+            <!-- Vista Trimestre -->
+            <div class="cronograma-container" id="quarterView" style="display: none;">
+                <div class="quarter-header">
+                    <h2>Resumen Trimestral <span id="quarterYear">2026</span></h2>
+                </div>
+                <div class="quarters-grid" id="quartersGrid">
+                    <!-- Generado por JavaScript -->
+                </div>
+                <div class="trend-chart-container">
+                    <h3>Tendencia de Productividad</h3>
+                    <div class="trend-chart" id="trendChart"></div>
+                </div>
+            </div>
+
+            <!-- Vista Mes -->
+            <div class="cronograma-container" id="monthView" style="display: none;">
+                <div class="month-header">
+                    <button class="back-to-year">
+                        <span>←</span> Volver
+                    </button>
+                    <h2 id="currentMonthTitle">Marzo 2026</h2>
+                    <div class="month-nav">
+                        <button class="prev-month" id="prevMonth">
+                            <span>←</span>
+                        </button>
+                        <button class="next-month" id="nextMonth">
+                            <span>→</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="month-calendar">
+                    <div class="weekdays">
+                        <div>Domingo</div>
+                        <div>Lunes</div>
+                        <div>Martes</div>
+                        <div>Miércoles</div>
+                        <div>Jueves</div>
+                        <div>Viernes</div>
+                        <div>Sábado</div>
+                    </div>
+                    <div class="days-grid" id="daysGrid">
+                        <!-- Generado por JavaScript -->
+                    </div>
+                </div>
+
+                <div class="month-summary" id="monthSummary">
+                    <!-- Generado por JavaScript -->
+                </div>
+            </div>
+
+            <!-- Leyenda de colores MEJORADA -->
+            <div class="legend-container">
+                <h4>Estado de días:</h4>
+                <div class="legend-items">
+                    <div class="legend-item">
+                        <span class="color-box" style="background: linear-gradient(135deg, #22c55e, #16a34a);"></span>
+                        <span>Completado (80-100%)</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="color-box" style="background: linear-gradient(135deg, #eab308, #ca8a04);"></span>
+                        <span>Progreso (40-79%)</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="color-box" style="background: linear-gradient(135deg, #ef4444, #dc2626);"></span>
+                        <span>Pendiente (0-39%)</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="color-box" style="background: linear-gradient(135deg, #3b82f6, #2563eb);"></span>
+                        <span>Con reflexión</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="color-box" style="background: linear-gradient(135deg, #a855f7, #9333ea);"></span>
+                        <span>Meta importante</span>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal para detalles del día -->
+    <div class="modal" id="dayModal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalDateTitle"></h2>
+                <button class="modal-close" onclick="document.getElementById('dayModal').style.display='none'">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="day-details" id="dayDetails"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/main.js"></script>
+    <script src="js/sidebar.js"></script>
+    <script src="js/cronograma.js"></script>
+    <script src="js/ai-assistant.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Inicializar sistema
+            if (!window.cronosMind) {
+                window.cronosMind = new CronosMind();
+            }
+            
+            // Inicializar cronograma
+            if (typeof CronogramaMaestro !== 'undefined') {
+                window.cronograma = new CronogramaMaestro();
+            }
+            
+            // Inicializar asistente
+            if (!window.aiAssistant && typeof AIAssistant !== 'undefined') {
+                window.aiAssistant = new AIAssistant();
+            }
+            
+            // Actualizar racha en sidebar
+            const streakSpan = document.getElementById('userStreak');
+            if (streakSpan && window.cronosMind) {
+                streakSpan.textContent = window.cronosMind.calculateStreak?.() || 0;
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,181 @@
+{
+    "user": {
+        "name": "Usuario",
+        "streak": 1,
+        "joinedDate": "2026-03-15T10:30:00.000Z",
+        "settings": {
+            "theme": "dark",
+            "notifications": true,
+            "autoSave": true,
+            "exportFormat": "json"
+        }
+    },
+    "goals": [
+        {
+            "id": 1,
+            "title": "Ejercicio matutino",
+            "type": "obligatoria",
+            "completed": false,
+            "date": "2026-03-15",
+            "createdAt": "2026-03-15T08:00:00.000Z",
+            "category": "salud",
+            "priority": "alta"
+        },
+        {
+            "id": 1773534782239,
+            "title": "Registro",
+            "type": "obligatoria",
+            "category": "personal",
+            "priority": "alta",
+            "deadline": "2026-03-15",
+            "description": "Desarrolla tus ideas y todo pensamiento para ser mejor que ayer y que hoy.",
+            "completed": false,
+            "createdAt": "2026-03-15T00:33:02.240Z",
+            "date": "Sat Mar 14 2026"
+        },
+        {
+            "id": 2,
+            "title": "Leer 30 minutos",
+            "type": "importante",
+            "completed": true,
+            "date": "2026-03-14",
+            "createdAt": "2026-03-14T09:00:00.000Z",
+            "category": "desarrollo",
+            "priority": "media"
+        },
+        {
+            "id": 1773534627153,
+            "title": "Meta de prueba",
+            "type": "obligatoria",
+            "category": "personal",
+            "priority": "media",
+            "completed": false,
+            "date": "Sat Mar 14 2026",
+            "createdAt": "2026-03-15T00:30:27.153Z",
+            "deadline": "2026-03-15"
+        },
+        {
+            "id": 3,
+            "title": "Meditar 10 minutos",
+            "type": "opcional",
+            "completed": false,
+            "date": "2026-03-15",
+            "createdAt": "2026-03-15T07:30:00.000Z",
+            "category": "bienestar",
+            "priority": "baja"
+        },
+        {
+            "id": 1773531275211,
+            "title": "Meta de prueba",
+            "type": "obligatoria",
+            "completed": false,
+            "date": "Sat Mar 14 2026",
+            "createdAt": "2026-03-14T23:34:35.211Z",
+            "deadline": "2026-03-14"
+        }
+    ],
+    "journals": {
+        "2026-03-14": [],
+        "2026-03-15": [],
+        "Sat Mar 14 2026": [
+            {
+                "id": 1773534401898,
+                "text": "Hola",
+                "timestamp": "2026-03-15T00:26:41.898Z",
+                "type": "reflexion",
+                "wordCount": 1
+            },
+            {
+                "id": 1773534627155,
+                "text": "Reflexi\u00f3n de prueba",
+                "mood": "motivado",
+                "timestamp": "2026-03-15T00:30:27.155Z",
+                "wordCount": 3
+            }
+        ]
+    },
+    "stats": {
+        "completedGoals": 1,
+        "totalEntries": 2,
+        "currentStreak": 1,
+        "bestStreak": 5,
+        "totalGoals": 3,
+        "completionRate": 33.33,
+        "weeklyProgress": {
+            "week": "2026-W11",
+            "completed": 3,
+            "total": 7
+        },
+        "monthlyProgress": {
+            "month": "2026-03",
+            "completed": 12,
+            "total": 30
+        }
+    },
+    "categories": {
+        "salud": {
+            "color": "#22c55e",
+            "icon": "\ud83d\udcaa"
+        },
+        "desarrollo": {
+            "color": "#3b82f6",
+            "icon": "\ud83d\udcda"
+        },
+        "bienestar": {
+            "color": "#a855f7",
+            "icon": "\ud83e\uddd8"
+        },
+        "trabajo": {
+            "color": "#f97316",
+            "icon": "\ud83d\udcbc"
+        },
+        "personal": {
+            "color": "#ec4899",
+            "icon": "\ud83c\udf1f"
+        }
+    },
+    "habits": [
+        {
+            "id": 1,
+            "name": "Ejercicio",
+            "frequency": "diario",
+            "streak": 5,
+            "bestStreak": 10,
+            "completedDates": [
+                "2026-03-10",
+                "2026-03-11",
+                "2026-03-12",
+                "2026-03-13",
+                "2026-03-14"
+            ]
+        },
+        {
+            "id": 2,
+            "name": "Lectura",
+            "frequency": "diario",
+            "streak": 3,
+            "bestStreak": 7,
+            "completedDates": [
+                "2026-03-12",
+                "2026-03-13",
+                "2026-03-14"
+            ]
+        }
+    ],
+    "milestones": [
+        {
+            "id": 1,
+            "title": "Primera semana completa",
+            "achieved": false,
+            "target": "2026-03-20",
+            "reward": "Descanso merecido"
+        }
+    ],
+    "notes": [],
+    "backups": [
+        {
+            "date": "2026-03-14T23:59:00.000Z",
+            "file": "backup_2026-03-14_23-59-00.json"
+        }
+    ]
+}

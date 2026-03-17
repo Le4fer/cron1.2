@@ -1,0 +1,74 @@
+cronosmind/
+├── index.html
+├── dashboard.html
+├── css/
+│   ├── style.css
+│   └── components.css
+├── js/
+│   ├── main.js
+│   ├── calendar.js
+│   ├── journal.js
+│   └── ai-assistant.js
+├── data/
+│   └── storage.json
+├── php/
+│   ├── save.php
+│   ├── load.php
+│   └── export.php
+└── assets/
+    └── icons/
+
+
+cronosmind/
+├── 📄 index.html (redirecciona a dashboard.html)
+├── 📄 dashboard.html (página principal)
+├── 📄 cronograma.html (vista anual)
+├── 📄 journal.html (reflexiones)
+├── 📄 goals.html (metas)
+├── 📁 css/
+│   ├── 📄 style.css (estilos base)
+│   ├── 📄 components.css (componentes comunes)
+│   ├── 📄 cronograma.css (estilos cronograma)
+│   ├── 📄 journal.css (estilos journal)
+│   └── 📄 goals.css (estilos metas)
+├── 📁 js/
+│   ├── 📄 main.js (NÚCLEO - OBLIGATORIO)
+│   ├── 📄 calendar.js (para dashboard)
+│   ├── 📄 cronograma.js (para cronograma)
+│   ├── 📄 journal.js (para journal)
+│   ├── 📄 goals.js (para metas)
+│   └── 📄 ai-assistant.js (asistente)
+├── 📁 php/
+│   ├── 📄 save.php
+│   ├── 📄 load.php
+│   ├── 📄 export.php
+│   ├── 📄 backup.php
+│   └── 📄 restore.php
+├── 📁 data/
+│   └── 📄 storage.json (CREAR VACÍO: {})
+└── 📄 manifest.json (para PWA)
+
+
+cronosmind/
+├── dashboard.html (✅ funcionando)
+├── cronograma.html (✅ funcionando)
+├── goals.html (✅ funcionando)
+├── journal.html (✅ funcionando)
+├── index.html (✅ redirecciona)
+├── css/
+│   ├── style.css (✅ estilos base)
+│   ├── components.css (✅ componentes)
+│   ├── cronograma.css (✅ específico)
+│   ├── journal.css (✅ específico)
+│   └── goals.css (✅ específico)
+├── js/
+│   ├── main.js (✅ núcleo)
+│   ├── sidebar.js (✅ menú funcional)
+│   ├── calendar.js (✅ calendario)
+│   ├── cronograma.js (✅ corregido)
+│   ├── journal.js (✅ corregido)
+│   ├── goals.js (✅ corregido)
+│   └── ai-assistant.js (✅ corregido)
+├── php/ (✅ todos los archivos)
+└── data/
+    └── storage.json (✅ datos)

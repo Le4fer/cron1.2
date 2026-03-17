@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CronosMind - Dashboard</title>
+    
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="manifest" href="manifest.json">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <nav class="sidebar">
+            <div class="logo">
+                <h1>Cronos<span>Mind</span></h1>
+            </div>
+            
+            <ul class="nav-menu">
+                <li class="nav-item active">
+                    <a href="dashboard.html">
+                        <span class="icon">📊</span>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                
+                <li class="nav-item has-submenu">
+                    <a href="cronograma.html">
+                        <span class="icon">📅</span>
+                        <span>Cronograma Maestro</span>
+                        <span class="arrow">▼</span>
+                    </a>
+                    <ul class="sub-menu">
+                        <li><a href="cronograma.html?view=year">Vista Anual</a></li>
+                        <li><a href="cronograma.html?view=quarter">Vista Trimestral</a></li>
+                        <li><a href="cronograma.html?view=month">Vista Mensual</a></li>
+                    </ul>
+                </li>
+                
+                <li class="nav-item">
+                    <a href="goals.html">
+                        <span class="icon">🎯</span>
+                        <span>Seguimiento de Objetivos</span>
+                    </a>
+                </li>
+                
+                <li class="nav-item">
+                    <a href="journal.html">
+                        <span class="icon">📔</span>
+                        <span>Registros (Journaling)</span>
+                    </a>
+                </li>
+                
+                <li class="nav-item" id="openAIAssistant">
+                    <a href="#">
+                        <span class="icon">🤖</span>
+                        <span>Asistente IA</span>
+                    </a>
+                </li>
+            </ul>
+
+            <div class="sidebar-footer">
+                <div class="user-info">
+                    <span class="user-avatar">👤</span>
+                    <div class="user-details">
+                        <span class="user-name" id="userNameDisplay">Usuario</span>
+                        <span class="user-streak">🔥 Racha: <span id="userStreak">0</span></span>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Contenido Principal -->
+        <main class="main-content">
+            <header class="top-bar">
+                <div class="page-title">
+                    <h2>Dashboard</h2>
+                    <span class="date">Hoy, <span id="currentDate"></span></span>
+                </div>
+                <div class="top-bar-actions">
+                    <button class="btn btn-primary" id="newEntryBtn">+ Nuevo Registro</button>
+                    <button class="btn btn-secondary" id="exportBtn">Exportar</button>
+                </div>
+            </header>
+
+            <div class="content-wrapper">
+                <!-- Stats Cards -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">✅</div>
+                        <div class="stat-info">
+                            <h3>Metas Cumplidas</h3>
+                            <p class="stat-number" id="completedGoals">0</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">⏳</div>
+                        <div class="stat-info">
+                            <h3>En Progreso</h3>
+                            <p class="stat-number" id="inProgress">0</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">📝</div>
+                        <div class="stat-info">
+                            <h3>Registros</h3>
+                            <p class="stat-number" id="totalEntries">0</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🔥</div>
+                        <div class="stat-info">
+                            <h3>Racha Actual</h3>
+                            <p class="stat-number" id="currentStreak">0</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Calendario -->
+                <div class="calendar-section">
+                    <div class="section-header">
+                        <h3>Cronograma Mensual</h3>
+                        <div class="calendar-nav">
+                            <button id="prevMonth">←</button>
+                            <span id="currentMonth">Marzo 2026</span>
+                            <button id="nextMonth">→</button>
+                        </div>
+                    </div>
+                    <div class="calendar-grid" id="calendarGrid"></div>
+                </div>
+
+                <!-- Metas y Journaling Rápido -->
+                <div class="dual-section">
+                    <div class="goals-section">
+                        <h3>Metas del Día</h3>
+                        <div class="goals-list" id="dailyGoals"></div>
+                        <button class="btn-add-goal" id="addGoalBtn">+ Añadir Meta</button>
+                    </div>
+                    
+                    <div class="quick-journal">
+                        <h3>Meditación Activa</h3>
+                        <textarea id="quickJournal" placeholder="Escribe tu reflexión del día..."></textarea>
+                        <button class="btn-save-journal" id="saveQuickJournal">Guardar Reflexión</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal para nuevo registro -->
+    <div class="modal" id="journalModal" style="display: none;">
+        <div class="modal-content">
+            <h2>Nuevo Registro Diario</h2>
+            <textarea id="modalJournalText" placeholder="Escribe tu reflexión del día..." rows="6"></textarea>
+            <div class="modal-actions">
+                <button class="btn btn-secondary" onclick="document.getElementById('journalModal').style.display='none'">Cancelar</button>
+                <button class="btn btn-primary" id="saveModalJournal">Guardar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts - IMPORTANTE: main.js SIEMPRE primero -->
+    <script src="js/main.js"></script>
+    <script src="js/sidebar.js"></script>
+    <script src="js/calendar.js"></script>
+    <script src="js/ai-assistant.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Inicializar sistema
+            if (!window.cronosMind) {
+                window.cronosMind = new CronosMind();
+            }
+            
+            // Inicializar calendario
+            if (typeof CalendarManager !== 'undefined' && document.getElementById('calendarGrid')) {
+                window.calendarManager = new CalendarManager();
+            }
+            
+            // Inicializar asistente IA (aparece en todas las páginas)
+            if (typeof AIAssistant !== 'undefined' && !window.aiAssistant) {
+                window.aiAssistant = new AIAssistant();
+            }
+            
+            // Event listeners específicos
+            document.getElementById('saveModalJournal')?.addEventListener('click', () => {
+                const text = document.getElementById('modalJournalText')?.value;
+                if (text && window.cronosMind) {
+                    window.cronosMind.saveJournalEntry(text);
+                    document.getElementById('journalModal').style.display = 'none';
+                    document.getElementById('modalJournalText').value = '';
+                }
+            });
+            
+            // Abrir asistente desde el sidebar
+            document.getElementById('openAIAssistant')?.addEventListener('click', (e) => {
+                e.preventDefault();
+                const assistant = document.getElementById('aiAssistant');
+                if (assistant) {
+                    assistant.classList.remove('minimized');
+                } else if (window.aiAssistant) {
+                    window.aiAssistant = new AIAssistant();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

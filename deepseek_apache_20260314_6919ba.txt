@@ -1,0 +1,33 @@
+# Habilitar compresión
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/css text/javascript application/json
+</IfModule>
+
+# Cache de archivos estáticos
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType text/css "access plus 1 month"
+    ExpiresByType application/javascript "access plus 1 month"
+    ExpiresByType image/png "access plus 1 year"
+</IfModule>
+
+# Seguridad básica
+Options -Indexes
+ServerSignature Off
+
+# Redirigir a HTTPS (opcional)
+# RewriteEngine On
+# RewriteCond %{HTTPS} off
+# RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
+
+# Prevenir acceso directo a archivos sensibles
+<FilesMatch "\.(json|lock|log)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# Permitir acceso a storage.json solo a través de PHP
+<Files "storage.json">
+    Order allow,deny
+    Deny from all
+</Files>

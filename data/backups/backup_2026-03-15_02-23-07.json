@@ -1,0 +1,174 @@
+{
+    "user": {
+        "name": "Usuario",
+        "streak": 0,
+        "joinedDate": "2026-03-15T10:30:00.000Z",
+        "settings": {
+            "theme": "dark",
+            "notifications": true,
+            "autoSave": true,
+            "exportFormat": "json"
+        }
+    },
+    "goals": [
+        {
+            "id": 1,
+            "title": "Ejercicio matutino",
+            "type": "obligatoria",
+            "completed": false,
+            "date": "2026-03-15",
+            "createdAt": "2026-03-15T08:00:00.000Z",
+            "category": "salud",
+            "priority": "alta"
+        },
+        {
+            "id": 2,
+            "title": "Leer 30 minutos",
+            "type": "importante",
+            "completed": true,
+            "date": "2026-03-14",
+            "createdAt": "2026-03-14T09:00:00.000Z",
+            "category": "desarrollo",
+            "priority": "media"
+        },
+        {
+            "id": 3,
+            "title": "Meditar 10 minutos",
+            "type": "opcional",
+            "completed": false,
+            "date": "2026-03-15",
+            "createdAt": "2026-03-15T07:30:00.000Z",
+            "category": "bienestar",
+            "priority": "baja"
+        },
+        {
+            "id": 1773531275211,
+            "title": "Meta de prueba",
+            "type": "obligatoria",
+            "completed": false,
+            "date": "Sat Mar 14 2026",
+            "createdAt": "2026-03-14T23:34:35.211Z",
+            "deadline": "2026-03-14"
+        }
+    ],
+    "journals": {
+        "2026-03-14": [
+            {
+                "text": "Hoy fue un d\u00eda productivo. Complet\u00e9 todas mis metas obligatorias y me siento bien con el progreso.",
+                "timestamp": "2026-03-14T22:00:00.000Z",
+                "type": "reflexion",
+                "mood": "positivo",
+                "energy": 8
+            }
+        ],
+        "2026-03-15": [
+            {
+                "text": "Comenzando la semana con energ\u00eda. Voy a enfocarme en mis metas importantes.",
+                "timestamp": "2026-03-15T09:15:00.000Z",
+                "type": "planificacion",
+                "mood": "motivado",
+                "energy": 9
+            }
+        ],
+        "Sat Mar 14 2026": [
+            {
+                "id": 1773531275213,
+                "text": "Prueba del sistema",
+                "timestamp": "2026-03-14T23:34:35.213Z",
+                "type": "reflexion",
+                "wordCount": 3
+            },
+            {
+                "id": 1773534401898,
+                "text": "Hola",
+                "timestamp": "2026-03-15T00:26:41.898Z",
+                "type": "reflexion",
+                "wordCount": 1
+            }
+        ]
+    },
+    "stats": {
+        "completedGoals": 1,
+        "totalEntries": 3,
+        "currentStreak": 1,
+        "bestStreak": 5,
+        "totalGoals": 3,
+        "completionRate": 33.33,
+        "weeklyProgress": {
+            "week": "2026-W11",
+            "completed": 3,
+            "total": 7
+        },
+        "monthlyProgress": {
+            "month": "2026-03",
+            "completed": 12,
+            "total": 30
+        }
+    },
+    "categories": {
+        "salud": {
+            "color": "#22c55e",
+            "icon": "\ud83d\udcaa"
+        },
+        "desarrollo": {
+            "color": "#3b82f6",
+            "icon": "\ud83d\udcda"
+        },
+        "bienestar": {
+            "color": "#a855f7",
+            "icon": "\ud83e\uddd8"
+        },
+        "trabajo": {
+            "color": "#f97316",
+            "icon": "\ud83d\udcbc"
+        },
+        "personal": {
+            "color": "#ec4899",
+            "icon": "\ud83c\udf1f"
+        }
+    },
+    "habits": [
+        {
+            "id": 1,
+            "name": "Ejercicio",
+            "frequency": "diario",
+            "streak": 5,
+            "bestStreak": 10,
+            "completedDates": [
+                "2026-03-10",
+                "2026-03-11",
+                "2026-03-12",
+                "2026-03-13",
+                "2026-03-14"
+            ]
+        },
+        {
+            "id": 2,
+            "name": "Lectura",
+            "frequency": "diario",
+            "streak": 3,
+            "bestStreak": 7,
+            "completedDates": [
+                "2026-03-12",
+                "2026-03-13",
+                "2026-03-14"
+            ]
+        }
+    ],
+    "milestones": [
+        {
+            "id": 1,
+            "title": "Primera semana completa",
+            "achieved": false,
+            "target": "2026-03-20",
+            "reward": "Descanso merecido"
+        }
+    ],
+    "notes": [],
+    "backups": [
+        {
+            "date": "2026-03-14T23:59:00.000Z",
+            "file": "backup_2026-03-14_23-59-00.json"
+        }
+    ]
+}
