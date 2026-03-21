@@ -86,7 +86,7 @@
             "priority": "alta",
             "deadline": "2026-03-21",
             "description": "Sera esencial",
-            "completed": true,
+            "completed": false,
             "completedDates": [],
             "createdAt": "2026-03-21T14:20:23.081Z",
             "date": "Sat Mar 21 2026",
@@ -144,7 +144,7 @@
         ]
     },
     "stats": {
-        "completedGoals": 2,
+        "completedGoals": 1,
         "totalEntries": 3,
         "currentStreak": 2,
         "bestStreak": 5,
