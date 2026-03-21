@@ -1,7 +1,7 @@
 {
     "user": {
         "name": "Usuario",
-        "streak": 2,
+        "streak": 0,
         "joinedDate": "2026-03-15T10:30:00.000Z",
         "settings": {
             "theme": "dark",
@@ -12,141 +12,85 @@
     },
     "goals": [
         {
-            "id": 1774056570022,
-            "title": "Ejercicios Semanales",
+            "id": 1,
+            "title": "Ejercicio matutino",
             "type": "obligatoria",
-            "category": "salud",
-            "priority": "alta",
-            "deadline": null,
-            "description": "Realizar minimo 20 Flexiones",
             "completed": false,
-            "createdAt": "2026-03-21T01:29:30.022Z",
-            "date": "Fri Mar 20 2026",
-            "schedule": {
-                "type": "semanal",
-                "days": [
-                    1,
-                    2,
-                    3,
-                    4,
-                    5
-                ]
-            },
-            "notification": {
-                "mode": "seleccionados",
-                "days": [
-                    1,
-                    2,
-                    3,
-                    4,
-                    5
-                ]
-            },
-            "completedDates": [
-                "Fri Mar 20 2026"
-            ]
+            "date": "2026-03-15",
+            "createdAt": "2026-03-15T08:00:00.000Z",
+            "category": "salud",
+            "priority": "alta"
         },
         {
-            "id": 1774101089302,
-            "title": "Manejar Bicicleta",
+            "id": 2,
+            "title": "Leer 30 minutos",
             "type": "importante",
-            "category": "salud",
-            "priority": "alta",
-            "deadline": "2026-03-22",
-            "description": "Despejar la mente con la bici",
             "completed": true,
-            "completedDates": [],
-            "createdAt": "2026-03-21T13:51:29.302Z",
-            "date": "Sat Mar 21 2026",
-            "schedule": {
-                "type": "diario",
-                "days": [
-                    0,
-                    1,
-                    2,
-                    3,
-                    4,
-                    5,
-                    6
-                ]
-            },
-            "notification": {
-                "mode": "seleccionados",
-                "days": [
-                    0,
-                    6
-                ]
-            }
+            "date": "2026-03-14",
+            "createdAt": "2026-03-14T09:00:00.000Z",
+            "category": "desarrollo",
+            "priority": "media"
         },
         {
-            "id": 1774102823081,
-            "title": "Aprender Ingles",
+            "id": 3,
+            "title": "Meditar 10 minutos",
             "type": "opcional",
-            "category": "personal",
-            "priority": "alta",
-            "deadline": "2026-03-21",
-            "description": "Sera esencial",
             "completed": false,
-            "completedDates": [],
-            "createdAt": "2026-03-21T14:20:23.081Z",
-            "date": "Sat Mar 21 2026",
-            "schedule": {
-                "type": "diario",
-                "days": [
-                    0,
-                    1,
-                    2,
-                    3,
-                    4,
-                    5,
-                    6
-                ]
-            },
-            "notification": {
-                "mode": "todos",
-                "days": [
-                    0,
-                    1,
-                    2,
-                    3,
-                    4,
-                    5,
-                    6
-                ]
-            }
+            "date": "2026-03-15",
+            "createdAt": "2026-03-15T07:30:00.000Z",
+            "category": "bienestar",
+            "priority": "baja"
+        },
+        {
+            "id": 1773531275211,
+            "title": "Meta de prueba",
+            "type": "obligatoria",
+            "completed": false,
+            "date": "Sat Mar 14 2026",
+            "createdAt": "2026-03-14T23:34:35.211Z",
+            "deadline": "2026-03-14"
         }
     ],
     "journals": {
-        "Fri Mar 20 2026": [
+        "2026-03-14": [
             {
-                "id": 1774057060439,
-                "text": "Test 20\/03\/26 => Modificaciones dentro de Goals.html. Verificaciones de las funcionalidades del sistema para  mejoras entre usuario\/sistema, se han realizado mejoras notorias",
-                "mood": "motivado",
-                "timestamp": "2026-03-21T01:37:40.439Z",
-                "wordCount": 22
+                "text": "Hoy fue un d\u00eda productivo. Complet\u00e9 todas mis metas obligatorias y me siento bien con el progreso.",
+                "timestamp": "2026-03-14T22:00:00.000Z",
+                "type": "reflexion",
+                "mood": "positivo",
+                "energy": 8
             }
         ],
-        "Sat Mar 21 2026": [
+        "2026-03-15": [
             {
-                "id": 1774100972211,
-                "text": "Teste 21\/03\/26 => Verificaci\u00f3n de la metas obligatorias diarias y funciones del cronograma",
+                "text": "Comenzando la semana con energ\u00eda. Voy a enfocarme en mis metas importantes.",
+                "timestamp": "2026-03-15T09:15:00.000Z",
+                "type": "planificacion",
                 "mood": "motivado",
-                "timestamp": "2026-03-21T13:49:32.211Z",
-                "wordCount": 13
+                "energy": 9
+            }
+        ],
+        "Sat Mar 14 2026": [
+            {
+                "id": 1773531275213,
+                "text": "Prueba del sistema",
+                "timestamp": "2026-03-14T23:34:35.213Z",
+                "type": "reflexion",
+                "wordCount": 3
             },
             {
-                "id": 1774102959981,
-                "text": "Test 21\/03\/26 => Modificaciones de Funcionalidades",
-                "mood": "feliz",
-                "timestamp": "2026-03-21T14:22:39.981Z",
-                "wordCount": 6
+                "id": 1773534401898,
+                "text": "Hola",
+                "timestamp": "2026-03-15T00:26:41.898Z",
+                "type": "reflexion",
+                "wordCount": 1
             }
         ]
     },
     "stats": {
         "completedGoals": 1,
-        "totalEntries": 3,
-        "currentStreak": 2,
+        "totalEntries": 4,
+        "currentStreak": 0,
         "bestStreak": 5,
         "totalGoals": 3,
         "completionRate": 33.33,
