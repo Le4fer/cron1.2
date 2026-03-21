@@ -740,3 +740,37 @@
 .goals-list::-webkit-scrollbar-thumb:hover {
     background: var(--primary-color);
 }
+
+/* Checkboxes de días de la semana - HORIZONTAL */
+.weekdays-checkboxes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.weekdays-checkboxes label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 12px;
+    background: var(--background-dark);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 13px;
+    color: var(--text-secondary);
+    user-select: none;
+}
+
+.weekdays-checkboxes label:hover {
+    background: var(--background-light);
+    border-color: var(--primary-color);
+    color: var(--text-primary);
+}
+
+.weekdays-checkboxes input[type="checkbox"] {
+    margin: 0;
+    accent-color: var(--primary-color);
+}

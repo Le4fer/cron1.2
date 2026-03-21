@@ -10,7 +10,9 @@ class GoalsManager {
         this.renderGoals();
         this.updateKPI();
         this.renderCharts();
+        this.sendGoalNotifications();
         this.setupEventListeners();
+        setInterval(() => this.sendGoalNotifications(), 60 * 60 * 1000); // cada hora revisa notificaciones
     }
 
     setupEventListeners() {
@@ -31,6 +33,14 @@ class GoalsManager {
                 this.renderGoals();
             });
         });
+
+        const goalType = document.getElementById('goalType');
+        const scheduleType = document.getElementById('goalScheduleType');
+        const notificationType = document.getElementById('goalNotificationType');
+
+        if (goalType) goalType.addEventListener('change', () => this.syncGoalOptions());
+        if (scheduleType) scheduleType.addEventListener('change', () => this.syncScheduleOptions());
+        if (notificationType) notificationType.addEventListener('change', () => this.syncNotificationOptions());
     }
 
     showGoalModal() {
@@ -42,7 +52,66 @@ class GoalsManager {
             
             const today = new Date().toISOString().split('T')[0];
             const deadlineInput = document.getElementById('goalDeadline');
-            if (deadlineInput) deadlineInput.value = today;
+            if (deadlineInput) {
+                deadlineInput.value = today;
+                deadlineInput.disabled = false;
+            }
+            const scheduleSelect = document.getElementById('goalScheduleType');
+            if (scheduleSelect) scheduleSelect.value = 'diario';
+            const notificationSelect = document.getElementById('goalNotificationType');
+            if (notificationSelect) notificationSelect.value = 'none';
+            document.querySelectorAll('.weekday-checkbox, .notify-weekday-checkbox').forEach(el => el.checked = false);
+
+            this.syncGoalOptions();
+            this.syncScheduleOptions();
+            this.syncNotificationOptions();
+        }
+        this.syncGoalOptions();
+        this.syncScheduleOptions();
+        this.syncNotificationOptions();
+    }
+
+    syncGoalOptions() {
+        const type = document.getElementById('goalType')?.value;
+        const deadlineInput = document.getElementById('goalDeadline');
+        const scheduleRow = document.getElementById('scheduleRow');
+        const notificationRow = document.getElementById('notificationRow');
+
+        if (type === 'obligatoria') {
+            if (deadlineInput) {
+                deadlineInput.value = '';
+                deadlineInput.disabled = true;
+            }
+            if (scheduleRow) scheduleRow.style.display = 'flex';
+            if (notificationRow) notificationRow.style.display = 'flex';
+        } else {
+            if (deadlineInput) {
+                deadlineInput.disabled = false;
+            }
+            if (scheduleRow) scheduleRow.style.display = 'none';
+            if (notificationRow) notificationRow.style.display = 'flex';
+        }
+    }
+
+    syncScheduleOptions() {
+        const scheduleType = document.getElementById('goalScheduleType')?.value;
+        const weekdaysRow = document.getElementById('weekdaysRow');
+
+        if (scheduleType === 'personalizado') {
+            if (weekdaysRow) weekdaysRow.style.display = 'block';
+        } else {
+            if (weekdaysRow) weekdaysRow.style.display = 'none';
+        }
+    }
+
+    syncNotificationOptions() {
+        const notificationType = document.getElementById('goalNotificationType')?.value;
+        const notifyWeekdaysRow = document.getElementById('notifyWeekdaysRow');
+
+        if (notificationType === 'seleccionados') {
+            if (notifyWeekdaysRow) notifyWeekdaysRow.style.display = 'block';
+        } else {
+            if (notifyWeekdaysRow) notifyWeekdaysRow.style.display = 'none';
         }
     }
 
@@ -53,17 +122,39 @@ class GoalsManager {
             return;
         }
 
+        const goalType = document.getElementById('goalType')?.value || 'obligatoria';
+        const scheduleType = document.getElementById('goalScheduleType')?.value || 'diario';
+        const notificationType = document.getElementById('goalNotificationType')?.value || 'none';
+        const weekDays = [...document.querySelectorAll('.weekday-checkbox:checked')].map(input => parseInt(input.value));
+        const notifyDays = [...document.querySelectorAll('.notify-weekday-checkbox:checked')].map(input => parseInt(input.value));
+
+        if (goalType === 'obligatoria' && scheduleType === 'personalizado' && weekDays.length === 0) {
+            window.cronosMind?.showNotification('Selecciona al menos un día para metas obligatorias', 'warning');
+            return;
+        }
+
+        const deadlineValue = document.getElementById('goalDeadline')?.value;
+
         const newGoal = {
             id: Date.now(),
             title: title,
-            type: document.getElementById('goalType')?.value || 'obligatoria',
+            type: goalType,
             category: document.getElementById('goalCategory')?.value || 'personal',
             priority: document.getElementById('goalPriority')?.value || 'media',
-            deadline: document.getElementById('goalDeadline')?.value || new Date().toISOString().split('T')[0],
+            deadline: goalType === 'obligatoria' ? null : (deadlineValue || new Date().toISOString().split('T')[0]),
             description: document.getElementById('goalDescription')?.value || '',
-            completed: false,
+            completed: false, // Para metas no obligatorias
+            completedDates: [], // Para metas obligatorias: array de fechas completadas
             createdAt: new Date().toISOString(),
-            date: new Date().toDateString()
+            date: new Date().toDateString(),
+            schedule: {
+                type: scheduleType,
+                days: scheduleType === 'personalizado' ? weekDays : (scheduleType === 'semanal' ? [1,2,3,4,5] : (scheduleType === 'fin-de-semana' ? [0,6] : [0,1,2,3,4,5,6]))
+            },
+            notification: {
+                mode: notificationType,
+                days: notificationType === 'seleccionados' ? notifyDays : (notificationType === 'todos' ? [0,1,2,3,4,5,6] : [])
+            }
         };
 
         if (!this.data.goals) this.data.goals = [];
@@ -106,10 +197,11 @@ class GoalsManager {
             const priorityWeight = { 'alta': 3, 'media': 2, 'baja': 1 };
             return (priorityWeight[b.priority] || 0) - (priorityWeight[a.priority] || 0);
         }).forEach(goal => {
+            const isCompletedToday = goal.type === 'obligatoria' ? this.isCompletedToday(goal) : goal.completed;
             html += `
-                <div class="goal-row ${goal.completed ? 'completed' : ''}" data-id="${goal.id}" data-type="${goal.type}">
+                <div class="goal-row ${isCompletedToday ? 'completed' : ''}" data-id="${goal.id}" data-type="${goal.type}">
                     <div class="goal-check">
-                        <input type="checkbox" ${goal.completed ? 'checked' : ''} 
+                        <input type="checkbox" ${isCompletedToday ? 'checked' : ''} 
                                onchange="window.goalsManager?.toggleGoal(${goal.id})">
                     </div>
                     <div class="goal-title">
@@ -120,8 +212,8 @@ class GoalsManager {
                         <span class="type-badge ${goal.type}">${this.getTypeLabel(goal.type)}</span>
                     </div>
                     <div class="goal-date">
-                        <span class="deadline ${this.isDeadlineNear(goal.deadline) ? 'urgent' : ''}">
-                            ${this.formatDate(goal.deadline)}
+                        <span class="deadline ${goal.type !== 'obligatoria' && this.isDeadlineNear(goal.deadline) ? 'urgent' : ''}">
+                            ${goal.type === 'obligatoria' ? this.getScheduleLabel(goal) : (goal.deadline ? this.formatDate(goal.deadline) : '--')}
                         </span>
                     </div>
                     <div class="goal-category">
@@ -154,20 +246,49 @@ class GoalsManager {
     toggleGoal(goalId) {
         const goal = this.data.goals.find(g => g.id === goalId);
         if (goal) {
-            goal.completed = !goal.completed;
-            if (window.cronosMind) {
-                window.cronosMind.data = this.data;
-                window.cronosMind.saveData();
+            if (goal.type === 'obligatoria') {
+                // Para metas obligatorias, toggle completado hoy
+                this.toggleGoalToday(goal);
+            } else {
+                // Para otras metas, toggle global
+                goal.completed = !goal.completed;
+                if (window.cronosMind) {
+                    window.cronosMind.data = this.data;
+                    window.cronosMind.saveData();
+                }
             }
             this.renderGoals();
             this.updateKPI();
             this.renderCharts();
             
             window.cronosMind?.showNotification(
-                goal.completed ? '¡Meta completada! 🎉' : 'Meta pendiente',
-                goal.completed ? 'success' : 'info'
+                this.isCompletedToday(goal) ? '¡Meta completada hoy! 🎉' : 'Meta pendiente',
+                this.isCompletedToday(goal) ? 'success' : 'info'
             );
         }
+    }
+
+    toggleGoalToday(goal) {
+        const today = new Date().toDateString();
+        if (!goal.completedDates) goal.completedDates = [];
+        
+        const index = goal.completedDates.indexOf(today);
+        if (index > -1) {
+            goal.completedDates.splice(index, 1);
+        } else {
+            goal.completedDates.push(today);
+        }
+        
+        if (window.cronosMind) {
+            window.cronosMind.data = this.data;
+            window.cronosMind.saveData();
+        }
+    }
+
+    isCompletedToday(goal) {
+        if (goal.type !== 'obligatoria') return goal.completed;
+        const today = new Date().toDateString();
+        return goal.completedDates?.includes(today) || false;
     }
 
     deleteGoal(goalId) {
@@ -202,7 +323,7 @@ class GoalsManager {
     updateKPI() {
         const goals = this.data.goals || [];
         const total = goals.length;
-        const completed = goals.filter(g => g.completed).length;
+        const completed = goals.filter(g => this.isCompletedToday(g)).length;
         const pending = total - completed;
         const rate = total > 0 ? Math.round((completed / total) * 100) : 0;
 
@@ -210,6 +331,73 @@ class GoalsManager {
         document.getElementById('completedGoals').textContent = completed;
         document.getElementById('pendingGoals').textContent = pending;
         document.getElementById('completionRate').textContent = rate + '%';
+    }
+
+    isGoalActiveToday(goal) {
+        if (!goal || !goal.schedule) return false;
+
+        const today = new Date().getDay();
+        const schedule = goal.schedule;
+
+        if (schedule.type === 'diario') {
+            return true;
+        }
+
+        if (schedule.type === 'semanal') {
+            return [1,2,3,4,5].includes(today);
+        }
+
+        if (schedule.type === 'fin-de-semana') {
+            return [0,6].includes(today);
+        }
+
+        if (schedule.type === 'personalizado') {
+            return Array.isArray(schedule.days) && schedule.days.includes(today);
+        }
+
+        return false;
+    }
+
+    sendGoalNotifications() {
+        const today = new Date().toDateString();
+        const notifiedKey = 'goals_notified_' + today;
+        const alreadyNotified = JSON.parse(localStorage.getItem(notifiedKey) || '[]');
+
+        this.data.goals?.forEach(goal => {
+            if (goal.completed) return;
+            if (alreadyNotified.includes(goal.id)) return;
+
+            if (goal.type === 'obligatoria' && this.isGoalActiveToday(goal)) {
+                window.cronosMind?.showNotification(`Hoy debes realizar: ${goal.title}`, 'info');
+                alreadyNotified.push(goal.id);
+                return;
+            }
+
+            if (goal.type === 'importante' && goal.notification) {
+                const mode = goal.notification.mode || 'none';
+                if (mode === 'todos') {
+                    window.cronosMind?.showNotification(`Meta importante (diaria): ${goal.title}`, 'info');
+                    alreadyNotified.push(goal.id);
+                    return;
+                }
+                if (mode === 'seleccionados') {
+                    const day = new Date().getDay();
+                    if (goal.notification.days?.includes(day)) {
+                        window.cronosMind?.showNotification(`Meta importante hoy: ${goal.title}`, 'info');
+                        alreadyNotified.push(goal.id);
+                        return;
+                    }
+                }
+            }
+        });
+
+        localStorage.setItem(notifiedKey, JSON.stringify(alreadyNotified));
+        // eliminar notificaciones de días anteriores
+        Object.keys(localStorage).forEach(key => {
+            if (key.startsWith('goals_notified_') && key !== notifiedKey) {
+                localStorage.removeItem(key);
+            }
+        });
     }
 
     renderCharts() {
@@ -354,6 +542,22 @@ class GoalsManager {
         return labels[type] || type;
     }
 
+    getScheduleLabel(goal) {
+        if (!goal || !goal.schedule) return 'Sin fecha';
+
+        const type = goal.schedule.type;
+        if (type === 'diario') return 'Repetir: diario';
+        if (type === 'semanal') return 'Repetir: lun-vie';
+        if (type === 'fin-de-semana') return 'Repetir: fin de semana';
+        if (type === 'personalizado' && Array.isArray(goal.schedule.days)) {
+            const names = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
+            const selected = goal.schedule.days.map(d => names[d]).join(', ');
+            return `Repetir: ${selected}`;
+        }
+
+        return 'Repetir: diario';
+    }
+
     getCategoryIcon(category) {
         const icons = { 
             'salud': '💪', 
@@ -377,12 +581,16 @@ class GoalsManager {
     }
 
     formatDate(dateStr) {
+        if (!dateStr) return '--';
         const date = new Date(dateStr);
+        if (isNaN(date)) return '--';
         return date.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit' });
     }
 
     isDeadlineNear(dateStr) {
+        if (!dateStr) return false;
         const deadline = new Date(dateStr);
+        if (isNaN(deadline)) return false;
         const today = new Date();
         const diffDays = Math.ceil((deadline - today) / (1000 * 60 * 60 * 24));
         return diffDays <= 3 && diffDays >= 0;

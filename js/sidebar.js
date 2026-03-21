@@ -14,19 +14,7 @@ class SidebarManager {
     }
 
     setupEventListeners() {
-        // Manejar clics en items con submenú
-        document.querySelectorAll('.nav-item.has-submenu > a').forEach(item => {
-            item.addEventListener('click', (e) => {
-                e.preventDefault();
-                const parent = item.closest('.nav-item');
-                parent.classList.toggle('expanded');
-                
-                // Guardar estado en localStorage
-                const menuId = parent.querySelector('a span:last-child').textContent;
-                this.saveMenuState(menuId, parent.classList.contains('expanded'));
-            });
-        });
-
+        // Remover manejo de clics en submenús - ahora es hover-based
         // Botón para colapsar sidebar (versión desktop)
         const toggleBtn = document.createElement('div');
         toggleBtn.className = 'sidebar-toggle';
@@ -74,11 +62,11 @@ class SidebarManager {
             if (href === currentPage) {
                 link.closest('.nav-item').classList.add('active');
                 
-                // Si está en submenú, expandir padre
+                // Si está en submenú, activar padre (sin expandir, ya que es hover-based)
                 const parentSubMenu = link.closest('.sub-menu');
                 if (parentSubMenu) {
                     const parentItem = parentSubMenu.closest('.nav-item');
-                    parentItem.classList.add('active', 'expanded');
+                    parentItem.classList.add('active');
                 }
             }
         });
@@ -91,13 +79,8 @@ class SidebarManager {
     }
 
     loadMenuStates() {
-        const menuStates = JSON.parse(localStorage.getItem('menuStates') || '{}');
-        document.querySelectorAll('.nav-item.has-submenu').forEach(item => {
-            const menuName = item.querySelector('a span:last-child').textContent;
-            if (menuStates[menuName]) {
-                item.classList.add('expanded');
-            }
-        });
+        // Remover carga de estados de menú - ahora es hover-based
+        // No cargar estados previos de expansión
     }
 
     saveNavigationState() {

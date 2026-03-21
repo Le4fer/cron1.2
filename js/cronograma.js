@@ -89,21 +89,54 @@ class CronogramaMaestro {
         return months[monthIndex];
     }
 
+    getScheduledGoals(dateStr) {
+        const date = new Date(dateStr);
+        const weekday = date.getDay();
+
+        return this.data.goals?.filter(goal => {
+            if (goal.type !== 'obligatoria' || !goal.schedule) return false;
+            const type = goal.schedule.type;
+
+            if (type === 'diario') return true;
+            if (type === 'semanal') return [1,2,3,4,5].includes(weekday);
+            if (type === 'fin-de-semana') return [0,6].includes(weekday);
+            if (type === 'personalizado') return Array.isArray(goal.schedule.days) && goal.schedule.days.includes(weekday);
+
+            return false;
+        }) || [];
+    }
+
     getDayStatus(dateStr) {
         const journals = this.data.journals?.[dateStr];
-        const goals = this.data.goals?.filter(g => g.date === dateStr) || [];
-        
+        const dateGoals = this.data.goals?.filter(g => g.date === dateStr) || [];
+        const scheduledGoals = this.getScheduledGoals(dateStr);
+        const goals = [...dateGoals];
+
+        scheduledGoals.forEach(goal => {
+            if (!goals.find(g => g.id === goal.id)) {
+                goals.push(goal);
+            }
+        });
+
         if (journals && journals.length > 0) return 'has-entry';
         if (goals.length > 0) {
-            const completedGoals = goals.filter(g => g.completed).length;
+            const completedGoals = goals.filter(g => this.isGoalCompletedOnDate(g, dateStr)).length;
             const percentage = (completedGoals / goals.length) * 100;
-            
+
             if (percentage >= 80) return 'completed';
             if (percentage >= 40) return 'progress';
             return 'pending';
         }
-        
+
         return 'empty';
+    }
+
+    isGoalCompletedOnDate(goal, dateStr) {
+        if (goal.type === 'obligatoria') {
+            return goal.completedDates?.includes(dateStr) || false;
+        } else {
+            return goal.completed;
+        }
     }
 
     getMonthData(month) {
@@ -114,11 +147,17 @@ class CronogramaMaestro {
         for (let day = 1; day <= daysInMonth; day++) {
             const date = new Date(this.currentYear, month, day);
             const dateStr = date.toDateString();
-            const goals = this.data.goals?.filter(g => g.date === dateStr) || [];
-            
+            const dateGoals = this.data.goals?.filter(g => g.date === dateStr) || [];
+            const scheduledGoals = this.getScheduledGoals(dateStr);
+            const goals = [...dateGoals];
+
+            scheduledGoals.forEach(goal => {
+                if (!goals.find(g => g.id === goal.id)) goals.push(goal);
+            });
+
             if (goals.length > 0) {
                 total++;
-                const completedGoals = goals.filter(g => g.completed).length;
+                const completedGoals = goals.filter(g => this.isGoalCompletedOnDate(g, dateStr)).length;
                 if (completedGoals === goals.length) completed++;
             }
         }
@@ -342,10 +381,17 @@ class CronogramaMaestro {
     }
 
     getDayData(dateStr) {
-        const goals = this.data.goals?.filter(g => g.date === dateStr) || [];
-        const completedGoals = goals.filter(g => g.completed).length;
+        const dateGoals = this.data.goals?.filter(g => g.date === dateStr) || [];
+        const scheduledGoals = this.getScheduledGoals(dateStr);
+        const goals = [...dateGoals];
+
+        scheduledGoals.forEach(goal => {
+            if (!goals.find(g => g.id === goal.id)) goals.push(goal);
+        });
+
+        const completedGoals = goals.filter(g => this.isGoalCompletedOnDate(g, dateStr)).length;
         const hasEntry = this.data.journals?.[dateStr]?.length > 0;
-        const importantGoal = goals.some(g => g.type === 'importante' && !g.completed);
+        const importantGoal = goals.some(g => g.type === 'importante' && !this.isGoalCompletedOnDate(g, dateStr));
 
         return {
             totalGoals: goals.length,
@@ -376,7 +422,13 @@ class CronogramaMaestro {
         });
 
         const journals = this.data.journals?.[dateStr] || [];
-        const goals = this.data.goals?.filter(g => g.date === dateStr) || [];
+        const dateGoals = this.data.goals?.filter(g => g.date === dateStr) || [];
+        const scheduledGoals = this.getScheduledGoals(dateStr);
+        const goals = [...dateGoals];
+
+        scheduledGoals.forEach(goal => {
+            if (!goals.find(g => g.id === goal.id)) goals.push(goal);
+        });
 
         let html = '';
 
@@ -396,11 +448,17 @@ class CronogramaMaestro {
         if (goals.length > 0) {
             html += '<div class="day-section"><h4>🎯 Metas</h4>';
             goals.forEach(g => {
+                const isCompleted = g.type === 'obligatoria' ? this.isGoalCompletedOnDate(g, dateStr) : g.completed;
                 html += `
-                    <div class="goal-item-mini ${g.completed ? 'completed' : ''}">
+                    <div class="goal-item-mini ${isCompleted ? 'completed' : ''}">
+                        <label class="goal-checkbox">
+                            <input type="checkbox" ${isCompleted ? 'checked' : ''} 
+                                   onchange="window.cronograma?.toggleGoalOnDate(${g.id}, '${dateStr}')">
+                            <span class="checkmark"></span>
+                        </label>
                         <span class="goal-type ${g.type}">${g.type}</span>
                         <span>${g.title}</span>
-                        <span>${g.completed ? '✅' : '⏳'}</span>
+                        <span>${isCompleted ? '✅' : '⏳'}</span>
                     </div>
                 `;
             });
@@ -413,6 +471,44 @@ class CronogramaMaestro {
 
         modalBody.innerHTML = html;
         modal.style.display = 'flex';
+    }
+
+    isGoalCompletedOnDate(goal, dateStr) {
+        if (goal.type !== 'obligatoria') return goal.completed;
+        return goal.completedDates?.includes(dateStr) || false;
+    }
+
+    toggleGoalOnDate(goalId, dateStr) {
+        const goal = this.data.goals?.find(g => g.id === goalId);
+        if (!goal) return;
+
+        if (goal.type === 'obligatoria') {
+            if (!goal.completedDates) goal.completedDates = [];
+            const index = goal.completedDates.indexOf(dateStr);
+            if (index > -1) {
+                goal.completedDates.splice(index, 1);
+            } else {
+                goal.completedDates.push(dateStr);
+            }
+        } else {
+            goal.completed = !goal.completed;
+        }
+
+        // Guardar cambios
+        if (window.cronosMind) {
+            window.cronosMind.data = this.data;
+            window.cronosMind.saveData();
+        }
+
+        // Actualizar modal
+        this.showDayDetails(dateStr);
+
+        // Notificación
+        const isCompleted = this.isGoalCompletedOnDate(goal, dateStr);
+        window.cronosMind?.showNotification(
+            isCompleted ? '¡Meta completada! 🎉' : 'Meta pendiente',
+            isCompleted ? 'success' : 'info'
+        );
     }
 
     setupEventListeners() {

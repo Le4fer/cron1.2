@@ -649,6 +649,153 @@
     transform: translateX(-2px);
 }
 
+/* Modal del día */
+#dayModal .modal-content {
+    max-width: 600px;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.day-section {
+    margin-bottom: 24px;
+    padding: 16px;
+    background: var(--background-dark);
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+}
+
+.day-section h4 {
+    color: var(--text-primary);
+    margin-bottom: 16px;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.entry-item {
+    padding: 12px;
+    background: var(--background-light);
+    border-radius: 8px;
+    margin-bottom: 8px;
+    border-left: 4px solid var(--info);
+}
+
+.entry-item p {
+    color: var(--text-primary);
+    margin-bottom: 4px;
+    line-height: 1.5;
+}
+
+.entry-item small {
+    color: var(--text-muted);
+    font-size: 12px;
+}
+
+.goal-item-mini {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    background: var(--background-light);
+    border-radius: 8px;
+    margin-bottom: 8px;
+    transition: all 0.3s ease;
+}
+
+.goal-item-mini:hover {
+    background: var(--background-card);
+    transform: translateX(4px);
+}
+
+.goal-item-mini.completed {
+    opacity: 0.8;
+    background: rgba(34, 197, 94, 0.1);
+    border-left: 4px solid var(--success);
+}
+
+.goal-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.goal-checkbox input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--primary-color);
+    cursor: pointer;
+}
+
+.checkmark {
+    width: 18px;
+    height: 18px;
+    border: 2px solid var(--border-color);
+    border-radius: 4px;
+    background: var(--background-dark);
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.goal-checkbox input[type="checkbox"]:checked + .checkmark {
+    background: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.goal-checkbox input[type="checkbox"]:checked + .checkmark::after {
+    content: '✓';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.goal-text {
+    flex: 1;
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+.goal-type-badge {
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    text-align: center;
+    min-width: 70px;
+}
+
+.goal-type-badge.obligatoria {
+    background: rgba(239, 68, 68, 0.15);
+    color: #ef4444;
+    border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.goal-type-badge.importante {
+    background: rgba(234, 179, 8, 0.15);
+    color: #eab308;
+    border: 1px solid rgba(234, 179, 8, 0.3);
+}
+
+.goal-type-badge.opcional {
+    background: rgba(34, 197, 94, 0.15);
+    color: #22c55e;
+    border: 1px solid rgba(34, 197, 94, 0.3);
+}
+
+.no-data {
+    text-align: center;
+    color: var(--text-muted);
+    padding: 40px 20px;
+    font-style: italic;
+}
+
 .month-nav {
     display: flex;
     gap: 8px;

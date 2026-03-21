@@ -198,6 +198,51 @@
                         <input type="date" id="goalDeadline">
                     </div>
                 </div>
+                <div class="form-row" id="scheduleRow" style="display:none;">
+                    <div class="form-group">
+                        <label>Frecuencia</label>
+                        <select id="goalScheduleType">
+                            <option value="diario">Diario</option>
+                            <option value="semanal">De lunes a viernes</option>
+                            <option value="fin-de-semana">Solo fines de semana</option>
+                            <option value="personalizado">Personalizado</option>
+                        </select>
+                    </div>
+                    <div class="form-group" id="weekdaysRow" style="display:none;">
+                        <label>Días</label>
+                        <div class="weekdays-checkboxes">
+                            <label><input type="checkbox" value="0" class="weekday-checkbox"> Dom</label>
+                            <label><input type="checkbox" value="1" class="weekday-checkbox"> Lun</label>
+                            <label><input type="checkbox" value="2" class="weekday-checkbox"> Mar</label>
+                            <label><input type="checkbox" value="3" class="weekday-checkbox"> Mié</label>
+                            <label><input type="checkbox" value="4" class="weekday-checkbox"> Jue</label>
+                            <label><input type="checkbox" value="5" class="weekday-checkbox"> Vie</label>
+                            <label><input type="checkbox" value="6" class="weekday-checkbox"> Sáb</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row" id="notificationRow" style="display:none;">
+                    <div class="form-group">
+                        <label>Notificación</label>
+                        <select id="goalNotificationType">
+                            <option value="none">Sin notificación</option>
+                            <option value="todos">Todos los días</option>
+                            <option value="seleccionados">Días seleccionados</option>
+                        </select>
+                    </div>
+                    <div class="form-group" id="notifyWeekdaysRow" style="display:none;">
+                        <label>Días de notificación</label>
+                        <div class="weekdays-checkboxes">
+                            <label><input type="checkbox" value="0" class="notify-weekday-checkbox"> Dom</label>
+                            <label><input type="checkbox" value="1" class="notify-weekday-checkbox"> Lun</label>
+                            <label><input type="checkbox" value="2" class="notify-weekday-checkbox"> Mar</label>
+                            <label><input type="checkbox" value="3" class="notify-weekday-checkbox"> Mié</label>
+                            <label><input type="checkbox" value="4" class="notify-weekday-checkbox"> Jue</label>
+                            <label><input type="checkbox" value="5" class="notify-weekday-checkbox"> Vie</label>
+                            <label><input type="checkbox" value="6" class="notify-weekday-checkbox"> Sáb</label>
+                        </div>
+                    </div>
+                </div>
                 <div class="form-group">
                     <label>Descripción</label>
                     <textarea id="goalDescription" rows="2"></textarea>
@@ -236,23 +281,7 @@
                 document.getElementById('goalDeadline').value = today;
             });
             
-            document.getElementById('goalForm')?.addEventListener('submit', (e) => {
-                e.preventDefault();
-                if (window.goalsManager) {
-                    window.goalsManager.saveGoal();
-                } else {
-                    // Fallback directo a cronosMind
-                    const title = document.getElementById('goalTitle')?.value;
-                    const type = document.getElementById('goalType')?.value;
-                    if (title && window.cronosMind) {
-                        window.cronosMind.addNewGoal(title, type);
-                        document.getElementById('goalModal').style.display = 'none';
-                        document.getElementById('goalForm').reset();
-                        // Recargar la página para actualizar
-                        setTimeout(() => location.reload(), 500);
-                    }
-                }
-            });
+            // El event listener del formulario está manejado en goals.js
         });
     </script>
 </body>
